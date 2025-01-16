@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@xyflow/react':
-        specifier: ^12.3.0
-        version: 12.3.5(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^12.4.0
+        version: 12.4.0(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       antd:
         specifier: ^5.22.2
         version: 5.22.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -683,14 +683,14 @@ packages:
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
 
-  '@xyflow/react@12.3.5':
-    resolution: {integrity: sha512-wAYqpicdrVo1rxCu0X3M9s3YIF45Agqfabw0IBryTGqjWvr2NyfciI8gIP4MB+NKpWWN5kxZ9tiZ9u8lwC7iAg==}
+  '@xyflow/react@12.4.0':
+    resolution: {integrity: sha512-dlRHLoAtAFrsOCLpgExGOi4dv0rMyrLBmKLEwg1lewJTT0Dz/PZG+ybyBT3OjfBF14enSXHO9lBm5X254jtGkw==}
     peerDependencies:
       react: '>=17'
       react-dom: '>=17'
 
-  '@xyflow/system@0.0.46':
-    resolution: {integrity: sha512-bmFXvboVdiydIFZmDCjrbBCYgB0d5pYdkcZPWbAxGmhMRUZ+kW3CksYgYxWabrw51rwpWitLEadvLrivG0mVfA==}
+  '@xyflow/system@0.0.48':
+    resolution: {integrity: sha512-9iOYeuWYzUhD/u+WkTm4PqbjWKuQxrntCcimTbJukNsBgmA/nkPsgV03txDw5zr94efu8g1pEw/YGupfvJXKUQ==}
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -2490,9 +2490,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@xyflow/react@12.3.5(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@xyflow/react@12.4.0(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@xyflow/system': 0.0.46
+      '@xyflow/system': 0.0.48
       classcat: 5.0.5
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -2501,7 +2501,7 @@ snapshots:
       - '@types/react'
       - immer
 
-  '@xyflow/system@0.0.46':
+  '@xyflow/system@0.0.48':
     dependencies:
       '@types/d3-drag': 3.0.7
       '@types/d3-selection': 3.0.11
