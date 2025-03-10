@@ -6,6 +6,7 @@ import getRouterConfig from "./router";
 
 import "antd/dist/reset.css";
 import "./index.css";
+import "./styles/index.css";
 
 const router = createBrowserRouter(getRouterConfig());
 

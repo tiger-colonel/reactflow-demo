@@ -1,0 +1,12 @@
+:root {
+  --border-radius-xl: 16px;
+  --border-radius-xll: 24px;
+  --size-xxs: 4px;
+  --size-xs: 8px;
+  --size-sm: 12px;
+  --size: 16px;
+  --size-base: var(--size);
+  --size-md: 20px;
+  --size-lg: 24px;
+  --size-xl: 32px;
+}
