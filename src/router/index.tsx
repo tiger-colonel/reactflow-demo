@@ -5,6 +5,7 @@ import CopyPage from "@/pages/copy";
 import RedoundePage from "@/pages/redoundo";
 import DeleteMiddlePage from "@/pages/delete-middle-node";
 import DynamicGroup from "@/pages/dynamic-group";
+import Shapes from "@/pages/shapes";
 
 export type RouterMenuConfig = {
   name: string;
@@ -40,6 +41,10 @@ export const getRouterConfig = (): ExtraRoute[] => {
         {
           path: "/dynamic-group",
           element: <DynamicGroup />,
+        },
+        {
+          path: "/shapes",
+          element: <Shapes />,
         },
       ],
     },
