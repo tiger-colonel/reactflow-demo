@@ -6,7 +6,6 @@ import {
   useStore,
   useStoreApi,
   NodeResizer,
-  getNodesBounds,
 } from "@xyflow/react";
 
 import useDetachNodes from "../use-detach-nodes";
@@ -15,7 +14,7 @@ const lineStyle = { borderColor: "white" };
 
 function GroupNode({ id }: NodeProps) {
   const store = useStoreApi();
-  const { deleteElements } = useReactFlow();
+  const { deleteElements, getNodesBounds } = useReactFlow();
   const detachNodes = useDetachNodes();
   const { minWidth, minHeight, hasChildNodes } = useStore((store) => {
     const childNodes = Array.from(store.nodeLookup.values()).filter(

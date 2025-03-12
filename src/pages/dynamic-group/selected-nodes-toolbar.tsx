@@ -4,7 +4,6 @@ import {
   NodeToolbar,
   useStoreApi,
   useReactFlow,
-  getNodesBounds,
 } from "@xyflow/react";
 
 import { getId } from "./utils";
@@ -13,7 +12,7 @@ const padding = 25;
 
 export default function SelectedNodesToolbar() {
   const nodes = useNodes();
-  const { setNodes } = useReactFlow();
+  const { setNodes, getNodesBounds } = useReactFlow();
   const store = useStoreApi();
   const selectedNodes = nodes.filter((node) => node.selected && !node.parentId);
   const selectedNodeIds = selectedNodes.map((node) => node.id);
@@ -30,10 +29,8 @@ export default function SelectedNodesToolbar() {
       id: groupId,
       type: "group",
       position: parentPosition,
-      style: {
-        width: rectOfNodes.width + padding * 2,
-        height: rectOfNodes.height + padding * 2,
-      },
+      width: rectOfNodes.width + padding * 2,
+      height: rectOfNodes.height + padding * 2,
       data: {},
     };
 
@@ -46,7 +43,7 @@ export default function SelectedNodesToolbar() {
             y: node.position.y - parentPosition.y + padding,
           },
           extent: "parent",
-          parentNode: groupId,
+          parentId: groupId,
         };
       }
 
