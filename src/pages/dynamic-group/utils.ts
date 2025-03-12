@@ -70,10 +70,10 @@ export const getNodePositionInsideParent = (
   groupNode: Node
 ) => {
   const position = node.position ?? { x: 0, y: 0 };
-  const nodeWidth = node.width ?? 0;
-  const nodeHeight = node.height ?? 0;
-  const groupWidth = groupNode.width ?? 0;
-  const groupHeight = groupNode.height ?? 0;
+  const nodeWidth = node.measured?.width ?? 0;
+  const nodeHeight = node.measured?.height ?? 0;
+  const groupWidth = groupNode.measured?.width ?? 0;
+  const groupHeight = groupNode.measured?.height ?? 0;
 
   if (position.x < groupNode.position.x) {
     position.x = 0;

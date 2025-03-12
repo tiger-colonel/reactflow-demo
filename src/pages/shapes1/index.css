@@ -1,0 +1,29 @@
+.react-flow .react-flow__handle {
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background-color: #784be8;
+  z-index: 3;
+  border: none;
+}
+
+/* .react-flow__edge-path {
+  stroke: #333;
+  stroke-width: 4;
+}
+
+.temp .react-flow__edge-path {
+  stroke: #bbb;
+  stroke-dasharray: 5 5;
+} */
+
+/* .react-flow__handle.source {
+  top: 0;
+  left: 0;
+  transform: none;
+  background: #f6ad55;
+  height: 100%;
+  width: 100%;
+  border-radius: 2px;
+  border: none;
+} */
