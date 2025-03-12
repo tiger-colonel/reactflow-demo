@@ -4,6 +4,7 @@ import BaseLayout from "@/layout/BaseLayout";
 import CopyPage from "@/pages/copy";
 import RedoundePage from "@/pages/redoundo";
 import DeleteMiddlePage from "@/pages/delete-middle-node";
+import DynamicGroup from "@/pages/dynamic-group";
 
 export type RouterMenuConfig = {
   name: string;
@@ -35,6 +36,10 @@ export const getRouterConfig = (): ExtraRoute[] => {
         {
           path: "/deletemiddle",
           element: <DeleteMiddlePage />,
+        },
+        {
+          path: "/dynamic-group",
+          element: <DynamicGroup />,
         },
       ],
     },
