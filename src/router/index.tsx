@@ -6,6 +6,7 @@ import RedoundePage from "@/pages/redoundo";
 import DeleteMiddlePage from "@/pages/delete-middle-node";
 import DynamicGroup from "@/pages/dynamic-group";
 import Shapes from "@/pages/shapes";
+import ExpandCollapsePage from "@/pages/expand-collapse";
 
 export type RouterMenuConfig = {
   name: string;
@@ -45,6 +46,10 @@ export const getRouterConfig = (): ExtraRoute[] => {
         {
           path: "/shapes",
           element: <Shapes />,
+        },
+        {
+          path: "/expand-collapse",
+          element: <ExpandCollapsePage />,
         },
       ],
     },
