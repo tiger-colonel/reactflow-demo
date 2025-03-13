@@ -2,33 +2,33 @@ import { NodeProps, useReactFlow } from "@xyflow/react";
 
 import { uuid, randomLabel } from "../utils";
 
-// this hook implements the logic for clicking a placeholder node
-// on placeholder node click: turn the placeholder and connecting edge into a workflow node
+// 该钩子实现了点击占位节点的逻辑
+// 点击占位节点时: 将占位节点及其连接边转变为工作流节点
 export function usePlaceholderClick(id: NodeProps["id"]) {
   const { getNode, setNodes, setEdges } = useReactFlow();
 
   const onClick = () => {
-    // we need the parent node object for getting its position
+    // 我们需要父节点对象来获取其位置
     const parentNode = getNode(id);
 
     if (!parentNode) {
       return;
     }
 
-    // create a unique id for the placeholder node that will be added as a child of the clicked node
+    // 为将作为被点击节点子节点的占位节点创建一个唯一ID
     const childPlaceholderId = uuid();
 
-    // create a placeholder node that will be added as a child of the clicked node
+    // 创建一个将作为被点击节点子节点的占位节点
     const childPlaceholderNode = {
       id: childPlaceholderId,
-      // the placeholder is placed at the position of the clicked node
-      // the layout function will animate it to its new position
+      // 占位节点放置在被点击节点的位置上
+      // 布局函数将使其动画过渡到新位置
       position: { x: parentNode.position.x, y: parentNode.position.y },
       type: "placeholder",
       data: { label: "+" },
     };
 
-    // we need a connection from the clicked node to the new placeholder
+    // 我们需要从被点击节点到新占位节点的连接
     const childPlaceholderEdge = {
       id: `${parentNode.id}=>${childPlaceholderId}`,
       source: parentNode.id,
@@ -39,7 +39,7 @@ export function usePlaceholderClick(id: NodeProps["id"]) {
     setNodes((nodes) =>
       nodes
         .map((node) => {
-          // here we are changing the type of the clicked node from placeholder to workflow
+          // 这里我们将被点击节点的类型从占位节点改为工作流节点
           if (node.id === id) {
             return {
               ...node,
@@ -49,14 +49,14 @@ export function usePlaceholderClick(id: NodeProps["id"]) {
           }
           return node;
         })
-        // add the new placeholder node
+        // 添加新的占位节点
         .concat([childPlaceholderNode])
     );
 
     setEdges((edges) =>
       edges
         .map((edge) => {
-          // here we are changing the type of the connecting edge from placeholder to workflow
+          // 这里我们将连接边的类型从占位类型改为工作流类型
           if (edge.target === id) {
             return {
               ...edge,
@@ -65,7 +65,7 @@ export function usePlaceholderClick(id: NodeProps["id"]) {
           }
           return edge;
         })
-        // add the new placeholder edge
+        // 添加新的占位边
         .concat([childPlaceholderEdge])
     );
   };

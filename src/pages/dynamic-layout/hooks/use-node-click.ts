@@ -3,47 +3,47 @@ import { NodeProps, useReactFlow, getOutgoers } from "@xyflow/react";
 
 import { uuid, randomLabel } from "../utils";
 
-// this hook implements the logic for clicking a workflow node
-// on workflow node click: create a new child node of the clicked node
+// 这个hook实现了点击工作流节点的逻辑
+// 点击工作流节点时：创建被点击节点的新子节点
 export function useNodeClick(id: NodeProps["id"]) {
   const { setEdges, setNodes, getNodes, getEdges, getNode } = useReactFlow();
 
   const onClick = useCallback(() => {
-    // we need the parent node object for positioning the new child node
+    // 我们需要父节点对象来定位新的子节点
     const parentNode = getNode(id);
 
     if (!parentNode) {
       return;
     }
 
-    // create a unique id for the child node
+    // 为子节点创建一个唯一的ID
     const childNodeId = uuid();
 
-    // create a unique id for the placeholder (the placeholder gets added to the new child node)
+    // 为占位符创建一个唯一的ID（占位符会被添加到新的子节点中）
     const childPlaceholderId = uuid();
 
-    // create the child node
+    // 创建子节点
     const childNode = {
       id: childNodeId,
-      // we try to place the child node close to the calculated position from the layout algorithm
-      // 150 pixels below the parent node, this spacing can be adjusted in the useLayout hook
+      // 我们尝试将子节点放置在布局算法计算出的位置附近
+      // 在父节点下方150像素，这个间距可以在useLayout hook中调整
       position: { x: parentNode.position.x, y: parentNode.position.y + 150 },
       type: "workflow",
       data: { label: randomLabel() },
     };
 
-    // create a placeholder for the new child node
-    // we want to display a placeholder for all workflow nodes that do not have a child already
-    // as the newly created node will not have a child, it gets this placeholder
+    // 为新的子节点创建一个占位符
+    // 我们希望为所有还没有子节点的工作流节点显示一个占位符
+    // 由于新创建的节点没有子节点，它会得到这个占位符
     const childPlaceholderNode = {
       id: childPlaceholderId,
-      // we place the placeholder 150 pixels below the child node, spacing can be adjusted in the useLayout hook
+      // 我们将占位符放置在子节点下方150像素处，间距可以在useLayout hook中调整
       position: { x: childNode.position.x, y: childNode.position.y + 150 },
       type: "placeholder",
       data: { label: "+" },
     };
 
-    // we need to create a connection from parent to child
+    // 我们需要创建从父节点到子节点的连接
     const childEdge = {
       id: `${parentNode.id}=>${childNodeId}`,
       source: parentNode.id,
@@ -51,7 +51,7 @@ export function useNodeClick(id: NodeProps["id"]) {
       type: "workflow",
     };
 
-    // we need to create a connection from child to our placeholder
+    // 我们需要创建从子节点到占位符的连接
     const childPlaceholderEdge = {
       id: `${childNodeId}=>${childPlaceholderId}`,
       source: childNodeId,
@@ -59,19 +59,19 @@ export function useNodeClick(id: NodeProps["id"]) {
       type: "placeholder",
     };
 
-    // if the clicked node has had any placeholders as children, we remove them because it will get a child now
+    // 如果被点击的节点有任何作为子节点的占位符，我们移除它们，因为它现在将得到一个子节点
     const existingPlaceholders = getOutgoers(parentNode, getNodes(), getEdges())
       .filter((node) => node.type === "placeholder")
       .map((node) => node.id);
 
-    // add the new nodes (child and placeholder), filter out the existing placeholder nodes of the clicked node
+    // 添加新节点（子节点和占位符），过滤掉被点击节点的现有占位符节点
     setNodes((nodes) =>
       nodes
         .filter((node) => !existingPlaceholders.includes(node.id))
         .concat([childNode, childPlaceholderNode])
     );
 
-    // add the new edges (node -> child, child -> placeholder), filter out any placeholder edges
+    // 添加新边（节点 -> 子节点，子节点 -> 占位符），过滤掉任何占位符边缘
     setEdges((edges) =>
       edges
         .filter((edge) => !existingPlaceholders.includes(edge.target))

@@ -6,8 +6,8 @@ import styles from "./NodeTypes.module.css";
 import useNodeClickHandler from "../hooks/use-node-click";
 
 const WorkflowNode = ({ id, data }: NodeProps) => {
-  // see the hook implementation for details of the click handler
-  // calling onClick adds a child node to this node
+  // 查看钩子实现以了解点击处理器的详情
+  // 调用onClick会为这个节点添加一个子节点
   const onClick = useNodeClickHandler(id);
 
   return (

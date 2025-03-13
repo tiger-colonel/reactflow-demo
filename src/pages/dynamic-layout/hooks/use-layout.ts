@@ -67,7 +67,7 @@ function useLayout() {
     // 运行布局并获取带有更新位置的节点
     const targetNodes = layoutNodes(nodes, edges);
 
-    // 如果你不想为节点添加动画，可以取消下面一行的注释
+    // 不想为节点添加动画，取消下面一行的注释
     // return setNodes(targetNodes);
 
     // 为了对新位置进行插值和动画处理，我们创建包含每个节点当前和目标位置的对象
@@ -88,14 +88,11 @@ function useLayout() {
 
       const currNodes = transitions.map(({ node, from, to }) => {
         return {
-          id: node.id,
+          ...node, // 保留节点的所有原始属性
           position: {
-            // 简单的线性插值
             x: from.x + (to.x - from.x) * s,
             y: from.y + (to.y - from.y) * s,
           },
-          data: { ...node.data },
-          type: node.type,
         };
       });
 
@@ -107,13 +104,11 @@ function useLayout() {
         // 这是为了避免故障
         const finalNodes = transitions.map(({ node, to }) => {
           return {
-            id: node.id,
+            ...node, // 保留节点的所有原始属性
             position: {
               x: to.x,
               y: to.y,
             },
-            data: { ...node.data },
-            type: node.type,
           };
         });
 

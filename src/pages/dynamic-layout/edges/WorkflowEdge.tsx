@@ -14,8 +14,8 @@ export default function CustomEdge({
   style,
   markerEnd,
 }: EdgeProps) {
-  // see the hook for implementation details
-  // onClick adds a node in between the nodes that are connected by this edge
+  // 有关实现细节，请参见钩子
+  // onClick 会在由该边连接的两个节点之间添加一个节点
   const onClick = useEdgeClick(id);
 
   const [edgePath, edgeCenterX, edgeCenterY] = getBezierPath({

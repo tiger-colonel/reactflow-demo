@@ -6,8 +6,8 @@ import styles from "./NodeTypes.module.css";
 import usePlaceholderClick from "../hooks/use-placeholder-click";
 
 const PlaceholderNode = ({ id, data }: NodeProps) => {
-  // see the hook implementation for details of the click handler
-  // calling onClick turns this node and the connecting edge into a workflow node
+  // 查看钩子实现以了解点击处理程序的详细信息
+  // 调用onClick将此节点和连接边转换为工作流节点
   const onClick = usePlaceholderClick(id);
 
   const nodeClasses = cx(styles.node, styles.placeholder);
