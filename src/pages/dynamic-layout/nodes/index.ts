@@ -3,7 +3,6 @@ import { NodeTypes } from "@xyflow/react";
 import PlaceholderNode from "./PlaceholderNode";
 import WorkflowNode from "./WorkflowNode";
 
-// two different node types are needed for our example: workflow and placeholder nodes
 const nodeTypes: NodeTypes = {
   placeholder: PlaceholderNode,
   workflow: WorkflowNode,
