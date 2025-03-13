@@ -7,6 +7,7 @@ import DeleteMiddlePage from "@/pages/delete-middle-node";
 import DynamicGroup from "@/pages/dynamic-group";
 import Shapes from "@/pages/shapes";
 import ExpandCollapsePage from "@/pages/expand-collapse";
+import WorkflowPage from "@/pages/dynamic-layout";
 
 export type RouterMenuConfig = {
   name: string;
@@ -50,6 +51,10 @@ export const getRouterConfig = (): ExtraRoute[] => {
         {
           path: "/expand-collapse",
           element: <ExpandCollapsePage />,
+        },
+        {
+          path: "/workflow",
+          element: <WorkflowPage />,
         },
       ],
     },
