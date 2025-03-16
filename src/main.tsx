@@ -2,6 +2,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ConfigProvider } from "antd";
 
+import "@ant-design/v5-patch-for-react-19";
+
 import getRouterConfig from "./router";
 
 import "antd/dist/reset.css";

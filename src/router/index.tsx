@@ -33,11 +33,11 @@ export const getRouterConfig = (): ExtraRoute[] => {
           element: <CopyPage />,
         },
         {
-          path: "/redoundo",
+          path: "/redo-undo",
           element: <RedoundePage />,
         },
         {
-          path: "/deletemiddle",
+          path: "/delete-middle-node",
           element: <DeleteMiddlePage />,
         },
         {
