@@ -8,6 +8,7 @@ import DynamicGroup from "@/pages/dynamic-group";
 import Shapes from "@/pages/shapes";
 import ExpandCollapsePage from "@/pages/expand-collapse";
 import WorkflowPage from "@/pages/dynamic-layout";
+import CollaborativePage from "@/pages/collaborative";
 
 export type RouterMenuConfig = {
   name: string;
@@ -55,6 +56,10 @@ export const getRouterConfig = (): ExtraRoute[] => {
         {
           path: "/workflow",
           element: <WorkflowPage />,
+        },
+        {
+          path: "/collaborative",
+          element: <CollaborativePage />,
         },
       ],
     },
