@@ -1,11 +1,22 @@
 import { Doc } from "yjs";
-// For this example we use the WebrtcProvider to synchronize the document
-// between multiple clients. Other providers are available.
-// You can find a list here: https://docs.yjs.dev/ecosystem/connection-provider
-import { WebrtcProvider } from "y-webrtc";
+
+import { WebsocketProvider } from "y-websocket";
 
 const ydoc = new Doc();
 
-export const provider = new WebrtcProvider("REACTFLOW-COLLAB-EXAMPLE", ydoc);
+export const wsProvider = new WebsocketProvider(
+  "ws://localhost:3033",
+  "REACTFLOW-COLLAB-EXAMPLE",
+  ydoc,
+  { connect: true }
+);
+
+wsProvider.on("status", (event) => {
+  console.log("event.status=========>", event.status);
+});
+
+// wsProvider.on("message", (event) => {
+//   console.log("Received message:", event.data);
+// });
 
 export default ydoc;

@@ -1,4 +1,4 @@
-import { DragEvent, DragEventHandler } from "react";
+import { DragEvent, DragEventHandler, useEffect } from "react";
 import {
   ReactFlow,
   Background,
@@ -20,6 +20,8 @@ import { defaultNodes, defaultEdges } from "./initial-elements";
 import ShapeNode from "./components/shape-node";
 import Sidebar from "./components/sidebar";
 import MiniMapNode from "./components/minimap-node";
+
+import { socket } from "./socket";
 
 const nodeTypes = {
   shape: ShapeNode,
@@ -64,6 +66,31 @@ function ShapesProExampleApp() {
     );
   };
 
+  const handleConnect = () => {
+    socket.connect();
+  };
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server");
+      socket.emit("findAllCollaborative", (response) =>
+        console.log("findAllCollaborative", response)
+      );
+      socket.emit("findOneCollaborative", 1, (response) =>
+        console.log("findOneCollaborative", response)
+      );
+      socket.emit("createCollaborative", { name: "guang" }, (response) =>
+        console.log("createCollaborative", response)
+      );
+      socket.emit("updateCollaborative", { id: 2, name: "dong" }, (response) =>
+        console.log("updateCollaborative", response)
+      );
+    });
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
   return (
     <div className="w-screen h-[calc(100vh-56px)]">
       <ReactFlow
@@ -84,6 +111,12 @@ function ShapesProExampleApp() {
         <Background />
         <Panel position="top-left">
           <Sidebar />
+          <div
+            onClick={handleConnect}
+            className="px-[12px] py-[8px] bg-[blue] text-[white] rounded-2xl"
+          >
+            连接
+          </div>
         </Panel>
         <Controls />
         {/* 保证缩略图中的展示也是正确的多边形 */}
