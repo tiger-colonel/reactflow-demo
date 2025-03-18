@@ -7,21 +7,18 @@ import * as decoding from "lib0/decoding";
 import * as awarenessProtocol from "y-protocols/awareness";
 
 interface UseYjsResult {
-  ytext: Y.Text | null;
+  ydoc: Y.Doc | null;
   awareness: awarenessProtocol.Awareness | null;
 }
 
 const useYjs = (roomName: string): UseYjsResult => {
   const socketRef = useRef<Socket | null>(null);
   const ydocRef = useRef<Y.Doc | null>(null);
-  const ytextRef = useRef<Y.Text | null>(null);
   const awarenessRef = useRef<awarenessProtocol.Awareness | null>(null);
 
   useEffect(() => {
     const ydoc = new Y.Doc();
-    const ytext = ydoc.getText("content");
     ydocRef.current = ydoc;
-    ytextRef.current = ytext;
 
     const awareness = new awarenessProtocol.Awareness(ydoc);
     awarenessRef.current = awareness;
@@ -29,6 +26,7 @@ const useYjs = (roomName: string): UseYjsResult => {
     const socket = io("http://localhost:3000", {
       query: { room: roomName },
     });
+
     socketRef.current = socket;
 
     socket.on("connect", () => {
@@ -45,7 +43,7 @@ const useYjs = (roomName: string): UseYjsResult => {
       socket.emit("sync", encoding.toUint8Array(awarenessEncoder));
     });
 
-    socket.on("sync", (message: any) => {
+    socket.on("sync", (message: ArrayBuffer) => {
       const uint8Array = new Uint8Array(message);
       const decoder = decoding.createDecoder(uint8Array);
       const messageType = decoding.readVarUint(decoder);
@@ -83,13 +81,13 @@ const useYjs = (roomName: string): UseYjsResult => {
       }
     });
 
-    socket.on("update", (update: any) => {
-      const uint8Array = new Uint8Array(update);
+    socket.on("update", (update: unknown) => {
+      const uint8Array = new Uint8Array(update as number[]); // Cast update to number[] to make TypeScript happy
       Y.applyUpdate(ydoc, uint8Array);
     });
 
-    // 发送文档更新到服务器
-    const updateHandler = (update: Uint8Array, origin: any) => {
+    // 发送更新到服务器
+    const updateHandler = (update: Uint8Array, origin: unknown) => {
       if (origin !== socket) {
         socket.emit("update", Array.from(update));
       }
@@ -103,7 +101,7 @@ const useYjs = (roomName: string): UseYjsResult => {
         updated,
         removed,
       }: { added: number[]; updated: number[]; removed: number[] },
-      origin: any
+      origin: unknown
     ) => {
       if (origin !== socket) {
         const changedClients = added.concat(updated).concat(removed);
@@ -120,19 +118,19 @@ const useYjs = (roomName: string): UseYjsResult => {
     awareness.on("update", awarenessUpdateHandler);
 
     return () => {
-      console.log("Disconnecting from WebSocket server");
+      console.log("Websocket 已断开");
       socket.off("connect");
       socket.off("sync");
       socket.off("update");
       ydoc.off("update", updateHandler);
-      awareness.off("update", awarenessUpdateHandler);
+      // awareness.off("update", awarenessUpdateHandler);
       socket.disconnect();
       ydoc.destroy();
     };
   }, [roomName]);
 
   return {
-    ytext: ytextRef.current,
+    ydoc: ydocRef.current,
     awareness: awarenessRef.current,
   };
 };

@@ -8,6 +8,7 @@ import {
   NodeMouseHandler,
   OnConnect,
   addEdge,
+  Background,
 } from "@xyflow/react";
 
 import useCursorStateSynced from "./hooks/use-cursor-state-synced";
@@ -18,7 +19,6 @@ import Sidebar from "./components/sidebar";
 
 import "@xyflow/react/dist/style.css";
 import "./index.css";
-import { TextEditor } from "./yjs-editor";
 
 const onDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -26,8 +26,8 @@ const onDragOver = (event: DragEvent) => {
 };
 
 function ReactFlowPro() {
-  const [nodes, setNodes, onNodesChange] = useNodesStateSynced();
-  const [edges, setEdges, onEdgesChange] = useEdgesStateSynced();
+  const [nodes, setNodes, onNodesChange] = useNodesStateSynced("test-room-id");
+  const [edges, setEdges, onEdgesChange] = useEdgesStateSynced("test-room-id");
   const [cursors, onMouseMove] = useCursorStateSynced();
   const { screenToFlowPosition } = useReactFlow();
 
@@ -80,8 +80,7 @@ function ReactFlowPro() {
     <div className="wrapper">
       <Sidebar />
       <div className="react-flow-wrapper">
-        <TextEditor roomName="test-doc-id" />
-        {/* <ReactFlow
+        <ReactFlow
           nodes={nodes}
           edges={edges}
           onEdgesChange={onEdgesChange}
@@ -94,7 +93,8 @@ function ReactFlowPro() {
         >
           <Cursors cursors={cursors} />
           <Controls />
-        </ReactFlow> */}
+          <Background />
+        </ReactFlow>
       </div>
     </div>
   );
