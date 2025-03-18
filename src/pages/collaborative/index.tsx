@@ -18,6 +18,7 @@ import Sidebar from "./components/sidebar";
 
 import "@xyflow/react/dist/style.css";
 import "./index.css";
+import { TextEditor } from "./yjs-editor";
 
 const onDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -79,7 +80,8 @@ function ReactFlowPro() {
     <div className="wrapper">
       <Sidebar />
       <div className="react-flow-wrapper">
-        <ReactFlow
+        <TextEditor roomName="test-doc-id" />
+        {/* <ReactFlow
           nodes={nodes}
           edges={edges}
           onEdgesChange={onEdgesChange}
@@ -92,7 +94,7 @@ function ReactFlowPro() {
         >
           <Cursors cursors={cursors} />
           <Controls />
-        </ReactFlow>
+        </ReactFlow> */}
       </div>
     </div>
   );
