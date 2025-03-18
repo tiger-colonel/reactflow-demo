@@ -11,14 +11,15 @@ import {
   Background,
 } from "@xyflow/react";
 
-import useCursorStateSynced from "./hooks/use-cursor-state-synced";
+// import useCursorStateSynced from "./hooks/use-cursor-state-synced";
 import useEdgesStateSynced from "./hooks/use-edges-state-synced";
 import useNodesStateSynced from "./hooks/use-nodes-state-synced";
-import Cursors from "./components/cursors";
+// import Cursors from "./components/cursors";
 import Sidebar from "./components/sidebar";
 
 import "@xyflow/react/dist/style.css";
 import "./index.css";
+import useYjs from "./useYjs";
 
 const onDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -28,7 +29,7 @@ const onDragOver = (event: DragEvent) => {
 function ReactFlowPro() {
   const [nodes, setNodes, onNodesChange] = useNodesStateSynced("test-room-id");
   const [edges, setEdges, onEdgesChange] = useEdgesStateSynced("test-room-id");
-  const [cursors, onMouseMove] = useCursorStateSynced();
+  // const [cursors, onMouseMove] = useCursorStateSynced("test-room-id");
   const { screenToFlowPosition } = useReactFlow();
 
   const onConnect: OnConnect = useCallback(
@@ -76,9 +77,11 @@ function ReactFlowPro() {
     [setNodes]
   );
 
+  const { refCount } = useYjs("test-room-id");
+
   return (
     <div className="wrapper">
-      <Sidebar />
+      <Sidebar refCount={refCount} />
       <div className="react-flow-wrapper">
         <ReactFlow
           nodes={nodes}
@@ -89,9 +92,9 @@ function ReactFlowPro() {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
-          onPointerMove={onMouseMove}
+          // onPointerMove={onMouseMove}
         >
-          <Cursors cursors={cursors} />
+          {/* <Cursors cursors={cursors} /> */}
           <Controls />
           <Background />
         </ReactFlow>

@@ -20,20 +20,19 @@ const connections = new Map<
 interface UseYjsResult {
   ydoc: Y.Doc | null;
   awareness: awarenessProtocol.Awareness | null;
+  refCount: number;
 }
 
 const useYjs = (roomName: string): UseYjsResult => {
   const connectionRef =
     useRef<typeof connections extends Map<string, infer T> ? T : never>(null);
-  const awarenessRef = useRef<awarenessProtocol.Awareness | null>(null);
 
   useEffect(() => {
     let connection = connections.get(roomName);
     if (!connection) {
       const ydoc = new Y.Doc();
-
       const awareness = new awarenessProtocol.Awareness(ydoc);
-      awarenessRef.current = awareness;
+
       const socket = io("http://localhost:3000", {
         query: { room: roomName },
       });
@@ -156,6 +155,7 @@ const useYjs = (roomName: string): UseYjsResult => {
   return {
     ydoc: connectionRef.current?.ydoc || null,
     awareness: connectionRef.current?.awareness || null,
+    refCount: connectionRef.current?.refCount || 0,
   };
 };
 

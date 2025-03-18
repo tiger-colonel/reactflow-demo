@@ -5,10 +5,11 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
   event.dataTransfer.effectAllowed = "move";
 };
 
-const Sidebar = () => {
+const Sidebar = ({ refCount }: { refCount: number }) => {
   return (
     <aside>
       <div className="description">拖拽节点到右侧画布</div>
+      <div className="description"> 当前连接数： {refCount}</div>
       <div
         className="react-flow__node-input"
         onDragStart={(event: DragEvent) => onDragStart(event, "input")}
