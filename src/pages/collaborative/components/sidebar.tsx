@@ -5,7 +5,7 @@ const onDragStart = (event: DragEvent, nodeType: string) => {
   event.dataTransfer.effectAllowed = "move";
 };
 
-const Sidebar = ({ refCount }: { refCount: number }) => {
+const Sidebar = ({ refCount = 1 }: { refCount?: number }) => {
   return (
     <aside>
       <div className="description">拖拽节点到右侧画布</div>

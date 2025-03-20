@@ -14,12 +14,13 @@ import {
 // import useCursorStateSynced from "./hooks/use-cursor-state-synced";
 import useEdgesStateSynced from "./hooks/use-edges-state-synced";
 import useNodesStateSynced from "./hooks/use-nodes-state-synced";
+// import useProvider from "./hooks/use-provider";
 // import Cursors from "./components/cursors";
 import Sidebar from "./components/sidebar";
 
 import "@xyflow/react/dist/style.css";
 import "./index.css";
-import useYjs from "./useYjs";
+import { useParams } from "react-router-dom";
 
 const onDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -27,10 +28,13 @@ const onDragOver = (event: DragEvent) => {
 };
 
 function ReactFlowPro() {
-  const [nodes, setNodes, onNodesChange] = useNodesStateSynced("test-room-id");
-  const [edges, setEdges, onEdgesChange] = useEdgesStateSynced("test-room-id");
-  // const [cursors, onMouseMove] = useCursorStateSynced("test-room-id");
+  const { id: currentId } = useParams();
+  const roomId = currentId || "example-document";
+  const [nodes, setNodes, onNodesChange] = useNodesStateSynced(roomId);
+  const [edges, setEdges, onEdgesChange] = useEdgesStateSynced(roomId);
+  // const [cursors, onMouseMove] = useCursorStateSynced(currentId);
   const { screenToFlowPosition } = useReactFlow();
+  // const { refCount } = useProvider(roomId);
 
   const onConnect: OnConnect = useCallback(
     (params) => {
@@ -77,11 +81,9 @@ function ReactFlowPro() {
     [setNodes]
   );
 
-  const { refCount } = useYjs("test-room-id");
-
   return (
     <div className="wrapper">
-      <Sidebar refCount={refCount} />
+      <Sidebar refCount={1} />
       <div className="react-flow-wrapper">
         <ReactFlow
           nodes={nodes}

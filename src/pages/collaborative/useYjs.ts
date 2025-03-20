@@ -4,7 +4,6 @@ import * as Y from "yjs";
 import * as syncProtocol from "y-protocols/sync";
 import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
-import * as awarenessProtocol from "y-protocols/awareness";
 
 // 创建一个单例存储对象
 const connections = new Map<
@@ -12,14 +11,12 @@ const connections = new Map<
   {
     socket: Socket;
     ydoc: Y.Doc;
-    awareness: awarenessProtocol.Awareness;
     refCount: number;
   }
 >();
 
 interface UseYjsResult {
   ydoc: Y.Doc | null;
-  awareness: awarenessProtocol.Awareness | null;
   refCount: number;
 }
 
@@ -31,7 +28,6 @@ const useYjs = (roomName: string): UseYjsResult => {
     let connection = connections.get(roomName);
     if (!connection) {
       const ydoc = new Y.Doc();
-      const awareness = new awarenessProtocol.Awareness(ydoc);
 
       const socket = io("http://localhost:3000", {
         query: { room: roomName },
@@ -40,7 +36,6 @@ const useYjs = (roomName: string): UseYjsResult => {
       connection = {
         socket,
         ydoc,
-        awareness,
         refCount: 0,
       };
       connections.set(roomName, connection);
@@ -49,26 +44,22 @@ const useYjs = (roomName: string): UseYjsResult => {
         console.log("Websocket 已连接");
         // 连接后立即发送同步请求
         const encoder = encoding.createEncoder();
-        encoding.writeVarUint(encoder, 0); // MessageType.SYNC
-        syncProtocol.writeSyncStep1(encoder, ydoc);
-        socket.emit("sync", encoding.toUint8Array(encoder));
+        encoding.writeVarUint(encoder, 0); // MessageType.SYNC 写入消息类型（0 表示同步消息）
 
-        // 查询其他客户端的状态
-        const awarenessEncoder = encoding.createEncoder();
-        encoding.writeVarUint(awarenessEncoder, 3); //MessageType.QUERY_AWARENESS
-        socket.emit("sync", encoding.toUint8Array(awarenessEncoder));
+        syncProtocol.writeSyncStep1(encoder, ydoc); // 使用 y-protocol/sync 写入同步的第一步（同步客户端的 state vector）
+        socket.emit("sync", encoding.toUint8Array(encoder)); // 发送同步消息到服务器
       });
 
       socket.on("sync", (message: ArrayBuffer) => {
         const uint8Array = new Uint8Array(message);
-        const decoder = decoding.createDecoder(uint8Array);
-        const messageType = decoding.readVarUint(decoder);
+        const decoder = decoding.createDecoder(uint8Array); // 创建一个解码器，用于反序列化数据
+        const messageType = decoding.readVarUint(decoder); // 读取消息类型
 
         switch (messageType) {
           case 0: {
             // MessageType.SYNC
             const encoder = encoding.createEncoder();
-            encoding.writeVarUint(encoder, 0);
+
             const syncMessageType = syncProtocol.readSyncMessage(
               decoder,
               encoder,
@@ -77,28 +68,20 @@ const useYjs = (roomName: string): UseYjsResult => {
             );
 
             if (syncMessageType === syncProtocol.messageYjsSyncStep1) {
-              syncProtocol.writeSyncStep2(encoder, ydoc);
+              syncProtocol.writeSyncStep2(encoder, ydoc); // 使用 y-protocol/sync 写入同步的第二步（同步客户端的缺失更新）
               socket.emit("sync", encoding.toUint8Array(encoder));
             } else if (syncMessageType === syncProtocol.messageYjsSyncStep2) {
               socket.emit("sync", encoding.toUint8Array(encoder));
             }
             break;
           }
-          case 1: {
-            // MessageType.AWARENESS
-            const awarenessUpdate = decoding.readVarUint8Array(decoder);
-            awarenessProtocol.applyAwarenessUpdate(
-              awareness,
-              awarenessUpdate,
-              socket
-            );
-            break;
-          }
         }
       });
 
       socket.on("update", (update: unknown) => {
-        const uint8Array = new Uint8Array(update as number[]); // Cast update to number[] to make TypeScript happy
+        const uint8Array = new Uint8Array(update as number[]);
+
+        // 将接收到的更新应用到本地 Yjs 文档
         Y.applyUpdate(ydoc, uint8Array);
       });
 
@@ -108,30 +91,8 @@ const useYjs = (roomName: string): UseYjsResult => {
           socket.emit("update", Array.from(update));
         }
       };
+      // 监听本地 Yjs 文档的更新，并在更新发生时执行 updateHandler
       ydoc.on("update", updateHandler);
-
-      // 处理 awareness 更新
-      const awarenessUpdateHandler = (
-        {
-          added,
-          updated,
-          removed,
-        }: { added: number[]; updated: number[]; removed: number[] },
-        origin: unknown
-      ) => {
-        if (origin !== socket) {
-          const changedClients = added.concat(updated).concat(removed);
-          const encoder = encoding.createEncoder();
-          encoding.writeVarUint(encoder, 1); // MessageType.AWARENESS
-          encoding.writeVarUint8Array(
-            encoder,
-            awarenessProtocol.encodeAwarenessUpdate(awareness, changedClients)
-          );
-          socket.emit("sync", encoding.toUint8Array(encoder));
-        }
-      };
-
-      awareness.on("update", awarenessUpdateHandler);
     }
 
     // 增加引用计数
@@ -154,7 +115,6 @@ const useYjs = (roomName: string): UseYjsResult => {
 
   return {
     ydoc: connectionRef.current?.ydoc || null,
-    awareness: connectionRef.current?.awareness || null,
     refCount: connectionRef.current?.refCount || 0,
   };
 };

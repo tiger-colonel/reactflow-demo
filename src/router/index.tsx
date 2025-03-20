@@ -58,7 +58,7 @@ export const getRouterConfig = (): ExtraRoute[] => {
           element: <WorkflowPage />,
         },
         {
-          path: "/collaborative",
+          path: "/collaborative/:id",
           element: <CollaborativePage />,
         },
       ],
