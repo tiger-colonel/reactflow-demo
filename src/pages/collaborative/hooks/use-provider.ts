@@ -14,8 +14,6 @@ export function useProvider(roomName: string = "example-document") {
   const [isConnected, setIsConnected] = useState(false);
   // const [refCount, setRefCount] = useState(0);
 
-  console.log("isConnected=========>", isConnected);
-
   useEffect(() => {
     // 如果全局 provider 不存在，则创建一个
     if (!globalProvider) {

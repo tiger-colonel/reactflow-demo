@@ -34,7 +34,6 @@ function ReactFlowPro() {
   const [edges, setEdges, onEdgesChange] = useEdgesStateSynced(roomId);
   // const [cursors, onMouseMove] = useCursorStateSynced(currentId);
   const { screenToFlowPosition } = useReactFlow();
-  // const { refCount } = useProvider(roomId);
 
   const onConnect: OnConnect = useCallback(
     (params) => {
